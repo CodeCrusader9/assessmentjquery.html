@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Password Strength Checker</title>
+    <style>
+        /* Add some basic styling */
+        .strength-meter {
+            width: 100%;
+            height: 10px;
+            background: #ddd;
+            margin-top: 10px;
+            position: relative;
+        }
+        .strength-meter div {
+            height: 100%;
+        }
+        .weak {
+            background: red;
+            width: 33%;
+        }
+        .medium {
+            background: yellow;
+            width: 66%;
+        }
+        .strong {
+            background: green;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <form>
+        <label for="password">Password:</label>
+        <input type="password" id="password">
+        <div class="strength-meter" id="strength-meter"></div>
+    </form>
+    
+    <script type="text/javascript" src="jquery-2.2.4.min.js"></script>
+    <script type="text/javascript" src="passChecker.jquery.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#password').on('keyup', function() {
+                var password = $(this).val();
+                var strength = checkPasswordStrength(password);
+                updateStrengthMeter(strength);
+            });
+        });
+
+        function checkPasswordStrength(password) {
+            var strength = 0;
+            if (password.length >= 8) strength++;
+            if (password.match(/[a-z]+/)) strength++;
+            if (password.match(/[A-Z]+/)) strength++;
+            if (password.match(/[0-9]+/)) strength++;
+            if (password.match(/[$@#&!]+/)) strength++;
+            
+            if (strength >= 5) {
+                return 'strong';
+            } else if (strength >= 3) {
+                return 'medium';
+            } else {
+                return 'weak';
+            }
+        }
+
+        function updateStrengthMeter(strength) {
+            var meter = $('#strength-meter');
+            meter.empty();
+            var meterBar = $('<div></div>').addClass(strength);
+            meter.append(meterBar);
+        }
+    </script>
+</body>
+</html>
